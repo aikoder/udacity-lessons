@@ -8,7 +8,7 @@ class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """ 
 
-    def __init__(self, env, learning=True, epsilon=1.0, alpha=0.7):
+    def __init__(self, env, learning=True, epsilon=1.0, alpha=0.5):
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
@@ -23,7 +23,8 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
-        self.t = 0.0
+        self.a = 0.99 # 0 < a < 1
+        self.t = 0
 
 
     def reset(self, destination=None, testing=False):
@@ -40,18 +41,13 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        if testing == True:
-            self.epsilon = 0.0
-            self.alpha = 0.0
+        if testing:
+            self.epsilon = 0
+            self.alpha = 0
         else:
-            self.t += 1.0
             # self.epsilon = self.epsilon - 0.05
-            # self.epsilon = 1.0/(self.t**2)
-            # self.epsilon = 1.0/(self.t**2 + self.alpha*self.t)
-            # self.epsilon = 1.0/(self.t**2 - self.alpha*self.t)
-            # self.epsilon = math.cos(self.alpha * self.t)
-            self.epsilon = math.cos(0.00157 * self.t)
-            # self.epsilon = math.fabs(math.cos(self.alpha*self.t))
+            self.epsilon = self.a**self.t # epsilon = a^t, for 0 < a < 1
+            self.t += 1
 
         return None
 
@@ -97,9 +93,8 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-        if self.learning == True:
-            if not state in self.Q.keys():
-                self.Q[state] = {None:0.0, 'forward':0.0, 'left':0.0, 'right':0.0}
+        if self.learning and state not in self.Q:
+            self.Q[state] = {t: 0.0 for t in self.valid_actions}
 
         return
 
@@ -119,18 +114,17 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        if self.learning == False:
+        # <[1]>
+        # action = random.choice(self.valid_actions)
+        if not self.learning:
             action = random.choice(self.valid_actions)
         else:
-            if self.epsilon > random.random() and self.epsilon > 0.01:
+            if random.random() <= self.epsilon:
                 action = random.choice(self.valid_actions)
             else:
-                maxQ = self.get_maxQ(state)
-                maxQ_actions = []
-                for _action in self.Q[state]:
-                    if maxQ == self.Q[state][_action]:
-                        maxQ_actions.append(_action)
-                action = random.choice(maxQ_actions)			
+                selected_action = [_action for _action in self.Q[state] if self.Q[state][_action] == self.get_maxQ(state)]
+                action = random.choice(selected_action)  
+ 
         return action
 
 
@@ -144,8 +138,9 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        if self.learning == True:
-            self.Q[state][action] = reward * self.alpha + self.Q[state][action] + (1 - self.alpha)
+        # Q = (1-alpha)*Q_old + alpha*Q_current
+        if self.learning:
+            self.Q[state][action] = (1 - self.alpha) * self.Q[state][action] + self.alpha * reward
 
         return
 
