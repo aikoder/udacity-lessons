@@ -14,9 +14,12 @@ import os
 image_width = 208
 image_height = 208
 
-ROOT_DIR = 'C:/Users/gavin.huang/Documents/udacity-lessons/p6.p7.cats.vs.dogs'
-TRAIN_DIR = ROOT_DIR + '/data/train/'
-TEST_DIR = ROOT_DIR + '/data/test/'
+# ROOT_DIR = 'C:/Users/gavin.huang/Documents/'
+ROOT_DIR = 'C:/Users/kmall/Documents/workstation/' # HOME
+PROJECT_DIR = 'udacity-lessons/p6.p7.cats.vs.dogs/'
+
+TRAIN_DIR = ROOT_DIR + PROJECT_DIR + 'data/train/'
+TEST_DIR = ROOT_DIR + PROJECT_DIR + 'data/test/'
 
 #print(TRAIN_DIR)
 #print(TEST_DIR)
@@ -77,7 +80,10 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
     image = tf.image.decode_jpeg(image_contents, channels=3)
     
     image = tf.image.resize_image_with_crop_or_pad(image, image_W, image_H)
-    image = tf.image.per_image_standardization(image)
+    #image = tf.image.resize_images(image, [image_H, image_W], \
+    #                               method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    #image = tf.cast(image, tf.float32)
+    #image = tf.image.per_image_standardization(image)
     image_batch, label_batch = tf.train.batch([image, label],
                                               batch_size=batch_size,
                                               num_threads=64,
@@ -93,8 +99,8 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
 from matplotlib import pyplot as plt
 
 
-BATCH_SIZE = 2
-CAPACITY = 128
+BATCH_SIZE = 5
+CAPACITY = 256
 image_width = 208
 image_height = 208
 
@@ -103,8 +109,8 @@ print('image size: %dx%d' % (image_width, image_height))
 image_list, label_list = get_files(TRAIN_DIR)
 image_batch, label_batch = get_batch(image_list, label_list, image_width, image_height, BATCH_SIZE, CAPACITY)
 
-print(image_batch)
-print(label_batch)
+# print(image_batch)
+# print(label_batch)
 
 with tf.Session() as sess:
     i = 0
