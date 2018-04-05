@@ -80,15 +80,13 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
     image = tf.image.decode_jpeg(image_contents, channels=3)
     
     image = tf.image.resize_image_with_crop_or_pad(image, image_W, image_H)
-    #image = tf.image.resize_images(image, [image_H, image_W], \
-    #                               method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    #image = tf.cast(image, tf.float32)
-    #image = tf.image.per_image_standardization(image)
+    image = tf.image.per_image_standardization(image)
     image_batch, label_batch = tf.train.batch([image, label],
                                               batch_size=batch_size,
                                               num_threads=64,
                                               capacity=capacity)
     label_batch = tf.reshape(label_batch, [batch_size])
+    image_batch = tf.cast(image_batch, tf.float32)
     
     return image_batch, label_batch
 
@@ -96,40 +94,40 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
 #%%
 # test
 #import matplotlib.pyplot as plt
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 
 
-BATCH_SIZE = 5
-CAPACITY = 256
-image_width = 208
-image_height = 208
+#BATCH_SIZE = 5
+#CAPACITY = 256
+#image_width = 208
+#image_height = 208
 
-print('image size: %dx%d' % (image_width, image_height))
+#print('image size: %dx%d' % (image_width, image_height))
 
-image_list, label_list = get_files(TRAIN_DIR)
-image_batch, label_batch = get_batch(image_list, label_list, image_width, image_height, BATCH_SIZE, CAPACITY)
+#image_list, label_list = get_files(TRAIN_DIR)
+#image_batch, label_batch = get_batch(image_list, label_list, image_width, image_height, BATCH_SIZE, CAPACITY)
 
 # print(image_batch)
 # print(label_batch)
 
-with tf.Session() as sess:
-    i = 0
-    coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(coord=coord)
-    try:
-        while not coord.should_stop() and (i < 1):
-            img, label = sess.run([image_batch, label_batch])
-            
-            for j in np.arange(BATCH_SIZE):
-                print('label: %d' % label[j])
-                plt.imshow(img[j, :, :, :])
-                plt.show()
-            i += 1
-            
-    except tf.errors.OutOfRangeError:
-        print('Done!')
-    finally:
-        coord.request_stop()
-    coord.join(threads)
+#with tf.Session() as sess:
+#    i = 0
+#    coord = tf.train.Coordinator()
+#    threads = tf.train.start_queue_runners(coord=coord)
+#    try:
+#        while not coord.should_stop() and (i < 1):
+#            img, label = sess.run([image_batch, label_batch])
+#            
+#            for j in np.arange(BATCH_SIZE):
+#                print('label: %d' % label[j])
+#                plt.imshow(img[j, :, :, :])
+#                plt.show()
+#            i += 1
+#            
+#    except tf.errors.OutOfRangeError:
+#        print('Done!')
+#    finally:
+#        coord.request_stop()
+#    coord.join(threads)
     
 #####
