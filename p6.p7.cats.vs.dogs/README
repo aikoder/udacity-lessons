@@ -1,5 +1,6 @@
-win10 + GTX 960
+win10/ubuntu1604 + GTX 960
 
+anaconda3-5.1.0 - https://www.anaconda.com/download/#linux
 tensorflow 1.7.0 - https://pypi.python.org/pypi/tensorflow-gpu
 CUDA 9.0 - https://developer.nvidia.com/cuda-90-download-archive
 CUDNN 7.0 - https://developer.nvidia.com/rdp/cudnn-download
