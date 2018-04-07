@@ -1,5 +1,6 @@
 win10/ubuntu1604 + GTX 960
 
+GTX-960 driver - 384.xxx
 anaconda3-5.1.0 - https://www.anaconda.com/download/#linux
 tensorflow 1.7.0 - https://pypi.python.org/pypi/tensorflow-gpu
 CUDA 9.0 - https://developer.nvidia.com/cuda-90-download-archive
