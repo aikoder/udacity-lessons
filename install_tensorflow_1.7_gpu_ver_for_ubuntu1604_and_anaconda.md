@@ -45,8 +45,8 @@ if not, login loop issue will occur
 ## install anaconda3
 `./Anaconda3-5.1.0-Linux-x86_64.sh`  
 `conda update conda`  
-`conda create -n tf python=3.6` 
-`conda install numpy pandas scikit-learn scipy matplotlib scikit-image setuptools wheel anaconda`
+`conda create -n tf python=3.6 anaconda`  
+`conda install numpy pandas scikit-learn scipy matplotlib scikit-image setuptools wheel`
 
 
 ## install tendorflow 1.7
