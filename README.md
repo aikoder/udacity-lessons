@@ -17,3 +17,6 @@ udacity git: `https://github.com/nd009/smartcab.git`
 
 ### p5.image-classification
 udacity git: `https://github.com/udacity/cn-deep-learning.git`
+
+### p7.exercise
+***
