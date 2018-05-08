@@ -1,5 +1,0 @@
-# install pygame in windows
-# search pygame package
-anaconda search -t conda pygame
-# install
-conda install --channel https://conda.anaconda.org/CogSci pygame
