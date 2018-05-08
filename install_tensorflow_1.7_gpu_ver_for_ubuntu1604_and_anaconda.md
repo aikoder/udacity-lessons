@@ -58,3 +58,6 @@ if not, login loop issue will occur
 ## install opencv3
 `conda install -c conda-forge/label/broken opencv`  
 
+## install others  
+`pip install -U numpy pandas sklearn matplotlib seaborn h5py pillow pydot-ng tqdm`  
+
