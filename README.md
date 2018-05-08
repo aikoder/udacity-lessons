@@ -18,5 +18,5 @@ udacity git: `https://github.com/nd009/smartcab.git`
 ### p5.image-classification
 udacity git: `https://github.com/udacity/cn-deep-learning.git`
 
-### p7.exercise
-***
+### p6.p7.cats.vs.dogs
+udacity git: `https://github.com/nd009/capstone/tree/master/dog_vs_cat`
